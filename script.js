@@ -8,6 +8,17 @@ const logArea = document.getElementById('logArea');
 const catcherStage = document.getElementById('catcherStage');
 const scoreValue = document.getElementById('scoreValue');
 const startGame = document.getElementById('startGame');
+const triviaQuestion = document.getElementById('triviaQuestion');
+const triviaScoreValue = document.getElementById('triviaScore');
+const triviaResult = document.getElementById('triviaResult');
+const triviaButtons = [
+  document.getElementById('triviaBtn0'),
+  document.getElementById('triviaBtn1'),
+  document.getElementById('triviaBtn2'),
+  document.getElementById('triviaBtn3'),
+];
+const matchGrid = document.getElementById('matchGrid');
+const matchScoreValue = document.getElementById('matchScore');
 
 let score = 0;
 let gameInterval = null;
@@ -17,6 +28,41 @@ let status = {
   clean: 90,
   energy: 85,
 };
+let triviaScore = 0;
+let currentTrivia = 0;
+let canAnswerTrivia = true;
+let matchScore = 0;
+let selectedMatch = [];
+let matchTiles = [];
+
+const triviaQuestions = [
+  {
+    question: '¿Cuál de estos emojis no aparece en el juego?',
+    options: ['😂', '🐱', '😎', '🔥'],
+    answer: 1,
+    explanation: '🐱 no forma parte del set de memes en el juego.',
+  },
+  {
+    question: '¿Qué acción hace subir más la felicidad?',
+    options: ['Dormir', 'Jugar', 'Limpiar', 'Comer'],
+    answer: 1,
+    explanation: 'Jugar eleva directamente la felicidad y baja energía.',
+  },
+  {
+    question: '¿Cuál es el mejor gesto cuando tu meme está sucio?',
+    options: ['Comer', 'Limpiar', 'Dormir', 'Ignorar'],
+    answer: 1,
+    explanation: 'Limpiar es la acción correcta para mejorar su estado.',
+  },
+  {
+    question: '¿Qué emoji indica que el meme está feliz?',
+    options: ['😴', '🤢', '😎', '😡'],
+    answer: 2,
+    explanation: '😎 es el gesto de un meme feliz y confiado.',
+  },
+];
+
+const matchMemes = ['😂', '🔥', '😎', '💀'];
 
 const memes = ['😂', '🤑', '🤡', '🔥', '💀', '👀', '😎'];
 const moods = [
@@ -132,6 +178,98 @@ function startCatcher() {
   gameInterval = setInterval(createMemeBubble, 1200);
 }
 
+function loadTrivia() {
+  const question = triviaQuestions[currentTrivia];
+  triviaQuestion.textContent = question.question;
+  triviaButtons.forEach((button, index) => {
+    button.textContent = question.options[index];
+    button.disabled = false;
+  });
+  triviaResult.textContent = '';
+  canAnswerTrivia = true;
+}
+
+function answerTrivia(index) {
+  if (!canAnswerTrivia) return;
+  canAnswerTrivia = false;
+  const question = triviaQuestions[currentTrivia];
+
+  if (index === question.answer) {
+    triviaScore += 10;
+    triviaResult.textContent = '✅ ¡Correcto!';
+    status.happy = clamp(status.happy + 12);
+    addLog('Trivia correcta. +10 puntos. 💡');
+  } else {
+    triviaResult.textContent = `❌ Incorrecto. ${question.explanation}`;
+    status.happy = clamp(status.happy - 8);
+    addLog('Trivia fallida. Intenta de nuevo. 🤔');
+  }
+
+  triviaScoreValue.textContent = triviaScore;
+  triviaButtons.forEach((button) => (button.disabled = true));
+  updateStatus();
+}
+
+function nextTrivia() {
+  currentTrivia = Math.floor(Math.random() * triviaQuestions.length);
+  loadTrivia();
+}
+
+function renderMatch() {
+  matchGrid.innerHTML = '';
+  matchTiles.forEach((tile, index) => {
+    const tileEl = document.createElement('button');
+    tileEl.className = `match-tile${tile.matched ? ' matched' : ''}`;
+    tileEl.textContent = tile.flipped || tile.matched ? tile.emoji : '❓';
+    tileEl.disabled = tile.matched;
+    tileEl.addEventListener('click', () => chooseTile(index));
+    matchGrid.appendChild(tileEl);
+  });
+}
+
+function initMatch() {
+  const pairs = [...matchMemes, ...matchMemes].sort(() => Math.random() - 0.5);
+  matchTiles = pairs.map((emoji, index) => ({ emoji, index, flipped: false, matched: false }));
+  matchScore = 0;
+  matchScoreValue.textContent = matchScore;
+  selectedMatch = [];
+  renderMatch();
+}
+
+function chooseTile(index) {
+  const tile = matchTiles[index];
+  if (tile.flipped || tile.matched || selectedMatch.length === 2) return;
+
+  tile.flipped = true;
+  selectedMatch.push(tile);
+  renderMatch();
+
+  if (selectedMatch.length === 2) {
+    if (selectedMatch[0].emoji === selectedMatch[1].emoji) {
+      selectedMatch.forEach((match) => (match.matched = true));
+      matchScore += 10;
+      matchScoreValue.textContent = matchScore;
+      status.happy = clamp(status.happy + 10);
+      addLog('¡Par encontrado en Meme Match! +10 puntos. 🧠');
+      selectedMatch = [];
+      if (matchTiles.every((tile) => tile.matched)) {
+        addLog('¡Completaste Meme Match! Reinicia para jugar otra vez. 🎉');
+      }
+    } else {
+      setTimeout(() => {
+        selectedMatch.forEach((match) => (match.flipped = false));
+        selectedMatch = [];
+        renderMatch();
+      }, 800);
+    }
+  }
+}
+
+function resetMatch() {
+  initMatch();
+  addLog('Meme Match reiniciado. Busca nuevos pares. 🔄');
+}
+
 setInterval(() => {
   status.hunger = clamp(status.hunger - 1);
   status.energy = clamp(status.energy - 1);
@@ -142,3 +280,5 @@ setInterval(() => {
 
 updateStatus();
 addLog('Tu meme está listo para jugar. ¡Hazlo viral!');
+loadTrivia();
+initMatch();

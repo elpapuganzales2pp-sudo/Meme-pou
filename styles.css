@@ -191,6 +191,76 @@ button:active {
   margin-top: 16px;
 }
 
+.quiz-card,
+.match-grid,
+.match-footer {
+  margin-top: 16px;
+}
+
+.quiz-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.quiz-options button,
+.match-tile {
+  border: none;
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(255,255,255,0.1);
+  color: var(--text);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.quiz-options button:hover,
+.match-tile:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.18);
+}
+
+.quiz-footer,
+.match-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.quiz-result {
+  margin-top: 12px;
+  color: #d1fae5;
+  font-weight: 600;
+}
+
+.match-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(70px, 1fr));
+  gap: 12px;
+}
+
+.match-tile {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  font-size: 1.8rem;
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.16);
+}
+
+.match-tile.matched {
+  background: linear-gradient(135deg, #22d3ee, #8b5cf6);
+  color: #020617;
+  cursor: default;
+}
+
+.match-footer button {
+  min-width: 120px;
+}
+
 .log-area {
   max-height: 360px;
   overflow-y: auto;

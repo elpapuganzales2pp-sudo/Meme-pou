@@ -46,6 +46,35 @@
         </div>
       </section>
 
+      <section class="game-card">
+        <h2>Meme Trivia</h2>
+        <p>Responde rápido para subir la alegría de tu meme.</p>
+        <div class="quiz-card">
+          <p id="triviaQuestion">¿Listo para el challenge?</p>
+          <div class="quiz-options">
+            <button id="triviaBtn0" onclick="answerTrivia(0)">A</button>
+            <button id="triviaBtn1" onclick="answerTrivia(1)">B</button>
+            <button id="triviaBtn2" onclick="answerTrivia(2)">C</button>
+            <button id="triviaBtn3" onclick="answerTrivia(3)">D</button>
+          </div>
+          <div class="quiz-footer">
+            <span>Puntos trivia: <strong id="triviaScore">0</strong></span>
+            <button onclick="nextTrivia()">Siguiente</button>
+          </div>
+          <p id="triviaResult" class="quiz-result"></p>
+        </div>
+      </section>
+
+      <section class="game-card">
+        <h2>Meme Match</h2>
+        <p>Encuentra pares iguales para ganar puntos y mantener el mood alto.</p>
+        <div class="match-grid" id="matchGrid"></div>
+        <div class="match-footer">
+          <span>Pares: <strong id="matchScore">0</strong></span>
+          <button onclick="resetMatch()">Reiniciar</button>
+        </div>
+      </section>
+
       <section class="log-card">
         <h2>Diario Meme</h2>
         <div id="logArea" class="log-area"></div>
