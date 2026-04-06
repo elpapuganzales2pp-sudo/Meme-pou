@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meme Pou - Cuida a tu Meme</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <span class="badge">Meme Pou</span>
+        <h1>Cuida a tu meme virtual</h1>
+        <p>Aliméntalo, diviértelo y mantén su mood en alto. ¡Hazlo viral!</p>
+      </div>
+      <div class="status-panel">
+        <div class="status-item"><span>🤣</span><strong id="hungerValue">70</strong>% Hambre</div>
+        <div class="status-item"><span>🔥</span><strong id="happyValue">80</strong>% Felicidad</div>
+        <div class="status-item"><span>💧</span><strong id="cleanValue">90</strong>% Limpieza</div>
+        <div class="status-item"><span>⚡</span><strong id="energyValue">85</strong>% Energía</div>
+      </div>
+    </header>
+
+    <main class="game-grid">
+      <section class="pet-card">
+        <div class="pet-screen">
+          <div id="memePet" class="meme-pet">😎</div>
+          <div id="petMood" class="pet-mood">¡Vamos, hazlo viral!</div>
+        </div>
+        <div class="actions">
+          <button onclick="feedMeme('taco')">🍕 Comer meme</button>
+          <button onclick="playMeme()">🎮 Jugar meme</button>
+          <button onclick="cleanMeme()">🧼 Limpiar</button>
+          <button onclick="restMeme()">💤 Dormir</button>
+        </div>
+      </section>
+
+      <section class="game-card">
+        <h2>Meme Catcher</h2>
+        <p>Haz clic en los memes cuando aparezcan para ganar puntos y mejorar el humor.</p>
+        <div class="catcher-stage" id="catcherStage"></div>
+        <div class="catcher-info">
+          <span>Puntos: <strong id="scoreValue">0</strong></span>
+          <button id="startGame" onclick="startCatcher()">Iniciar juego</button>
+        </div>
+      </section>
+
+      <section class="log-card">
+        <h2>Diario Meme</h2>
+        <div id="logArea" class="log-area"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
